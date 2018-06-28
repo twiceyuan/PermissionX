@@ -10,7 +10,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.ListView
 import com.twiceyuan.commonadapter.library.adapter.CommonListAdapter
-import com.twiceyuan.permissionx.PermissionX
+import com.twiceyuan.permissionx.kotlin.requestPermissionX
 import java.util.*
 
 class MainActivityWithKotlin : AppCompatActivity() {
@@ -45,33 +45,30 @@ class MainActivityWithKotlin : AppCompatActivity() {
                 .map { it.key }
                 .toList().toTypedArray()
 
-        PermissionX.request(this, todoRequestPermissions)
-                .onGranted {
-                    adapter.notifyDataSetChanged()
-                    messageDialog("所有权限被允许")
+        requestPermissionX(todoRequestPermissions).onGranted {
+            adapter.notifyDataSetChanged()
+            messageDialog("所有权限被允许")
+        }.onDenied {
+            adapter.notifyDataSetChanged()
+            messageDialog("有权限被拒绝")
+        }.onRequest { _, grantResult ->
+
+            adapter.notifyDataSetChanged()
+
+            val granted = ArrayList<String>()
+            val denied = ArrayList<String>()
+
+            grantResult.forEach { key, value ->
+                val permissionName = getPermissionName(key)
+                when {
+                    permissionName == null -> return@forEach
+                    value == true -> granted.add(permissionName)
+                    value == false -> denied.add(permissionName)
                 }
-                .onDenied {
-                    adapter.notifyDataSetChanged()
-                    messageDialog("有权限被拒绝")
-                }
-                .onRequest { _, grantResult ->
+            }
 
-                    adapter.notifyDataSetChanged()
-
-                    val granted = ArrayList<String>()
-                    val denied = ArrayList<String>()
-
-                    grantResult.forEach { key, value ->
-                        val permissionName = getPermissionName(key)
-                        when {
-                            permissionName == null -> return@forEach
-                            value == true -> granted.add(permissionName)
-                            value == false -> denied.add(permissionName)
-                        }
-                    }
-
-                    messageDialog(String.format("允许的权限：\n%s\n\n拒绝的权限：%s", granted, denied))
-                }
+            messageDialog(String.format("允许的权限：\n%s\n\n拒绝的权限：%s", granted, denied))
+        }
     }
 
     private fun initStatus() {

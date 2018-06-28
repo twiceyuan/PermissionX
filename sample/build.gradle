@@ -36,6 +36,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation project(':permissionx')
+    implementation project(':permissionx-kotlin')
     implementation('com.github.twiceyuan:CommonAdapter:0.7.3') {
         exclude group: 'com.android.support', module: 'recyclerview-v7'
     }
