@@ -22,18 +22,6 @@ public class PermissionX {
     private static AtomicInteger requestCodeGenerator = new AtomicInteger(200);
 
     /**
-     * Request single permission
-     *
-     * @param activity   permission request host.
-     * @param permission the permission you want to request.
-     * @return permission request holder
-     */
-    @SuppressWarnings("WeakerAccess")
-    public static PermissionRequestHolder request(Activity activity, String permission) {
-        return request(activity, new String[]{permission});
-    }
-
-    /**
      * Request single permissions
      *
      * @param activity    permissions request host.
@@ -43,18 +31,6 @@ public class PermissionX {
     @SuppressWarnings("WeakerAccess")
     public static PermissionRequestHolder request(Activity activity, String[] permissions) {
         return requestInternal(activity, permissions);
-    }
-
-    /**
-     * Request single permission
-     *
-     * @param fragment   permission request host.
-     * @param permission the permission you want to request.
-     * @return permission request holder
-     */
-    @SuppressWarnings("WeakerAccess")
-    public static PermissionRequestHolder request(Fragment fragment, String permission) {
-        return request(fragment, new String[]{permission});
     }
 
     /**

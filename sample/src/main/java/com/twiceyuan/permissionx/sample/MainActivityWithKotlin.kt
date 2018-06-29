@@ -43,7 +43,7 @@ class MainActivityWithKotlin : AppCompatActivity() {
         val todoRequestPermissions = permissionCheckStatus
                 .filter { it.value }
                 .map { it.key }
-                .toList().toTypedArray()
+                .toList()
 
         requestPermissionX(todoRequestPermissions).onGranted {
             adapter.notifyDataSetChanged()
