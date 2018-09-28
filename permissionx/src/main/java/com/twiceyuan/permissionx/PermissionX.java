@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -35,6 +37,13 @@ public class PermissionX {
     }
 
     /**
+     * @see this#request(Activity, String[])
+     */
+    public static PermissionRequestHolder request(Activity activity, @NonNull Collection<String> permissions) {
+        return requestInternal(activity, permissions.toArray(new String[0]));
+    }
+
+    /**
      * Request single permissions
      *
      * @param fragment    permissions request host.
@@ -44,6 +53,13 @@ public class PermissionX {
     @SuppressWarnings("WeakerAccess")
     public static PermissionRequestHolder request(Fragment fragment, String[] permissions) {
         return requestInternal(fragment, permissions);
+    }
+
+    /**
+     * @see this#request(Fragment, String[])
+     */
+    public static PermissionRequestHolder request(Fragment fragment, @NonNull Collection<String> permissions) {
+        return requestInternal(fragment, permissions.toArray(new String[0]));
     }
 
     /**

@@ -8,6 +8,6 @@ fun Activity.requestPermissionX(vararg permissions: String) = PermissionX.reques
 
 fun Fragment.requestPermissionX(vararg permissions: String) = PermissionX.request(this, permissions)
 
-fun Activity.requestPermissionX(permissions: List<String>) = PermissionX.request(this, permissions.toTypedArray())
+fun Activity.requestPermissionX(permissions: Collection<String>) = PermissionX.request(this, permissions)
 
-fun Fragment.requestPermissionX(permissions: List<String>) = PermissionX.request(this, permissions.toTypedArray())
+fun Fragment.requestPermissionX(permissions: Collection<String>) = PermissionX.request(this, permissions)
