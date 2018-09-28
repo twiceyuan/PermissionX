@@ -5,7 +5,6 @@ import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -28,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Map<String, Boolean> permissionCheckStatus = new HashMap<>();
 
+    // 示例的权限列表
     private List<String> permissions = Arrays.asList(
             Manifest.permission.READ_PHONE_STATE,
             Manifest.permission.ACCESS_WIFI_STATE,
@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
             Manifest.permission.CALL_PHONE
     );
 
+    // 显示权限列表的适配器
     private CommonListAdapter<String, PermissionItemViewHolder> adapter;
 
     @Override
@@ -50,15 +51,17 @@ public class MainActivity extends AppCompatActivity {
     @SuppressLint("MissingPermission")
     private void requestPermission() {
 
+        // 临时存储需要请求的权限
         List<String> todoRequestPermissions = new ArrayList<>();
 
+        // 根据权限的选择情况过滤
         for (Map.Entry<String, Boolean> entry : permissionCheckStatus.entrySet()) {
             if (entry.getValue()) {
                 todoRequestPermissions.add(entry.getKey());
             }
         }
 
-        PermissionX.request(this, todoRequestPermissions.toArray(new String[todoRequestPermissions.size()]))
+        PermissionX.request(this, todoRequestPermissions.toArray(new String[0]))
                 .onGranted(() -> {
                     adapter.notifyDataSetChanged();
                     messageDialog("所有权限被允许");
@@ -99,13 +102,16 @@ public class MainActivity extends AppCompatActivity {
 
         adapter.setOnBindListener((parentView, position, permission, holder) -> {
 
-            holder.mCheckBox.setChecked(permissionCheckStatus.get(permission));
+            final Boolean isChecked = permissionCheckStatus.get(permission);
+            holder.mCheckBox.setChecked(isChecked == null ? false : isChecked);
             holder.mCheckBox.setText(getPermissionName(permission));
             boolean isGranted = ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED;
             holder.mTvStatus.setText(isGranted ? "已允许" : "未允许");
 
             holder.getItemView().setOnClickListener((v) -> {
-                permissionCheckStatus.put(permission, !permissionCheckStatus.get(permission));
+                Boolean isCheckedInner = permissionCheckStatus.get(permission);
+                isCheckedInner = isCheckedInner == null ? false : isCheckedInner;
+                permissionCheckStatus.put(permission, !isCheckedInner);
                 adapter.notifyDataSetChanged();
             });
         });
@@ -133,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
      * @param permission 权限字符串常量
      * @return 权限信息对象
      */
-    @Nullable
+    @NonNull
     private String getPermissionName(@NonNull String permission) {
         try {
             PackageManager manager = getPackageManager();
