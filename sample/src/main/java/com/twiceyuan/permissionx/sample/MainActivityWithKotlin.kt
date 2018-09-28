@@ -7,10 +7,9 @@ import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
-import android.view.View
-import android.widget.ListView
 import com.twiceyuan.commonadapter.library.adapter.CommonListAdapter
 import com.twiceyuan.permissionx.kotlin.requestPermissionX
+import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
 class MainActivityWithKotlin : AppCompatActivity() {
@@ -40,7 +39,7 @@ class MainActivityWithKotlin : AppCompatActivity() {
     @SuppressLint("MissingPermission")
     private fun requestPermission() {
 
-        val todoRequestPermissions = permissionCheckStatus
+        val todoRequestPermissions: List<String> = permissionCheckStatus
                 .filter { it.value }
                 .map { it.key }
                 .toList()
@@ -58,7 +57,7 @@ class MainActivityWithKotlin : AppCompatActivity() {
             val granted = ArrayList<String>()
             val denied = ArrayList<String>()
 
-            grantResult.forEach { key, value ->
+            grantResult.entries.forEach { (key, value) ->
                 val permissionName = getPermissionName(key)
                 when {
                     permissionName == null -> return@forEach
@@ -76,15 +75,19 @@ class MainActivityWithKotlin : AppCompatActivity() {
             permissionCheckStatus[permission] = false
         }
 
-        val listView = findViewById<ListView>(R.id.listView)
         listView.adapter = adapter
 
         adapter.setOnBindListener { _, _, permission, holder ->
 
+            val isGranted = ContextCompat.checkSelfPermission(this, permission)
+            holder.mTvStatus.text = if (isGranted == PackageManager.PERMISSION_GRANTED) {
+                "已允许"
+            } else {
+                "未允许"
+            }
+
             holder.mCheckBox.isChecked = permissionCheckStatus[permission] == true
             holder.mCheckBox.text = getPermissionName(permission)
-            val isGranted = ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED
-            holder.mTvStatus.text = if (isGranted) "已允许" else "未允许"
 
             holder.itemView.setOnClickListener {
                 permissionCheckStatus[permission] = !(permissionCheckStatus[permission] ?: false)
@@ -95,7 +98,7 @@ class MainActivityWithKotlin : AppCompatActivity() {
         adapter.addAll(permissions.toList())
         adapter.notifyDataSetChanged()
 
-        findViewById<View>(R.id.btn_request).setOnClickListener { requestPermission() }
+        btn_request.setOnClickListener { requestPermission() }
     }
 
     /**
