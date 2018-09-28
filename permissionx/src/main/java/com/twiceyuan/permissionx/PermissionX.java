@@ -1,11 +1,12 @@
 package com.twiceyuan.permissionx;
 
 import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 
 import java.util.HashMap;
@@ -84,8 +85,8 @@ public class PermissionX {
 
         sPermissionRequestMap.put(requestCode, requestHolder);
 
-        if (host instanceof Activity) {
-            ((Activity) host).getFragmentManager().beginTransaction()
+        if (host instanceof FragmentActivity) {
+            ((FragmentActivity) host).getSupportFragmentManager().beginTransaction()
                     .add(PermissionRequestFragment.newInstance(requestCode, permissionGrantedResult), TAG_FRAGMENT)
                     .commit();
             return requestHolder;
@@ -94,11 +95,7 @@ public class PermissionX {
         if (host instanceof Fragment) {
             FragmentManager fragmentManager;
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                fragmentManager = ((Fragment) host).getChildFragmentManager();
-            } else {
-                fragmentManager = ((Fragment) host).getFragmentManager();
-            }
+            fragmentManager = ((Fragment) host).getChildFragmentManager();
 
             fragmentManager.beginTransaction()
                     .add(PermissionRequestFragment.newInstance(requestCode, permissionGrantedResult), TAG_FRAGMENT)

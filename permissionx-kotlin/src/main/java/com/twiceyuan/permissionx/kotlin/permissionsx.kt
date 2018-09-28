@@ -1,7 +1,7 @@
 package com.twiceyuan.permissionx.kotlin
 
 import android.app.Activity
-import android.app.Fragment
+import android.support.v4.app.Fragment
 import com.twiceyuan.permissionx.PermissionX
 
 fun Activity.requestPermissionX(vararg permissions: String) = PermissionX.request(this, permissions)
