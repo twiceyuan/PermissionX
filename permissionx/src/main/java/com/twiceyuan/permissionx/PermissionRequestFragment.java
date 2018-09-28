@@ -1,6 +1,5 @@
 package com.twiceyuan.permissionx;
 
-import android.app.Fragment;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -11,7 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PermissionRequestFragment extends Fragment {
+public class PermissionRequestFragment extends android.support.v4.app.Fragment {
 
     public static final String ARG_GRANTED_STATUS = "grantedStatus";
     public static final String ARG_REQUEST_CODE   = "requestCode";
