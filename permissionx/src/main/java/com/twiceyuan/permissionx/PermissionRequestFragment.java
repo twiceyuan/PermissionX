@@ -34,7 +34,7 @@ public class PermissionRequestFragment extends android.support.v4.app.Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //noinspection unchecked
+        //noinspection unchecked,ConstantConditions
         mPermissionStatus = (HashMap<String, Boolean>) getArguments().getSerializable(ARG_GRANTED_STATUS);
         mRequestCode = getArguments().getInt(ARG_REQUEST_CODE);
 
@@ -47,7 +47,7 @@ public class PermissionRequestFragment extends android.support.v4.app.Fragment {
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            requestPermissions(todoRequest.toArray(new String[todoRequest.size()]), mRequestCode);
+            requestPermissions(todoRequest.toArray(new String[0]), mRequestCode);
         }
     }
 
@@ -67,7 +67,10 @@ public class PermissionRequestFragment extends android.support.v4.app.Fragment {
             }
         }
 
-        PermissionX.sPermissionRequestMap.get(mRequestCode).handle(isAllGranted, mPermissionStatus);
-        PermissionX.sPermissionRequestMap.put(mRequestCode, null);
+        PermissionRequestHolder holder = PermissionX.sPermissionRequestMap.get(mRequestCode);
+        if (holder != null) {
+            holder.handle(isAllGranted, mPermissionStatus);
+            PermissionX.sPermissionRequestMap.remove(mRequestCode);
+        }
     }
 }
