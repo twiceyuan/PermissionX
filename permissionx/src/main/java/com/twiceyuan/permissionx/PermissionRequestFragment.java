@@ -54,7 +54,13 @@ public class PermissionRequestFragment extends android.support.v4.app.Fragment {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode != mRequestCode) return;
+        if (requestCode != mRequestCode) {
+            return;
+        }
+
+        if (permissions.length == 0 && grantResults.length == 0) {
+            return;
+        }
 
         boolean isAllGranted = true;
         for (int i = 0; i < permissions.length; i++) {
